@@ -1,13 +1,28 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/client";
-
 import { Button, Confirm, Icon } from "semantic-ui-react";
 
-function DeleteButton({ postId }) {
+import { FETCH_POSTS_QUERY } from "../util/graphql";
+
+function DeleteButton({ postId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION, {
+    update(proxy, result) {
+      setConfirmOpen(false);
+      const data = proxy.readQuery({
+        query: FETCH_POSTS_QUERY,
+      });
+      // data.getPosts = data.getPosts.filter((p) => p.id !== postId);
+      proxy.writeQuery({
+        query: FETCH_POSTS_QUERY,
+        data: {
+          getPosts: [result.data.deletePost, ...data.getPosts],
+        },
+      });
+      if (callback) callback(); //this is for the situation where a user is deleting a post from the single page view. In this case we want to pass a callback that redirects the user to the home page
+    },
     variables: {
       postId,
     },

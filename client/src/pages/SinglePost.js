@@ -19,6 +19,10 @@ function SinglePost(props) {
     },
   });
 
+  function deletePostCallback() {
+    props.history.push("/");
+  }
+
   let postMarkup;
   if (!getPost) {
     postMarkup = <p>Loading post...</p>;
@@ -66,9 +70,13 @@ function SinglePost(props) {
                     {commentCount}
                   </Label>
                 </Button>
-                {user && user.username === username && (
-                  <DeleteButton postId={postId} />
-                )}
+                {user &&
+                  user.username === username && ( //we check to see if user is truthy and if it is that the user matches the user of the post and if so we render the delete button
+                    <DeleteButton
+                      postId={postId}
+                      callback={deletePostCallback}
+                    />
+                  )}
               </Card.Content>
             </Card>
           </Grid.Column>
