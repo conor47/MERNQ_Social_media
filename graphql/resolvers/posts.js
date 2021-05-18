@@ -36,7 +36,7 @@ module.exports = {
       // before performing any action
       const user = checkAuth(context);
 
-      if (args.body.trim() === "") {
+      if (body.trim() === "") {
         throw new Error("Post body must not be empty");
       }
 
