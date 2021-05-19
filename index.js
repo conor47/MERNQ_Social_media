@@ -11,6 +11,8 @@ const { MONGODB } = require("./config");
 
 const pubsub = new PubSub();
 
+const PORT = process.env.port || 5000;
+
 // instead of using an authentication middleware with express , which runs on every request ( even for non protected routes)
 // we will perform authentication using context
 
@@ -24,7 +26,12 @@ const server = new ApolloServer({
 
 mongoose.connect(MONGODB, { useNewUrlParser: true }).then(() => {
   console.log("MongoDB connected");
-  return server.listen({ port: 5000 }).then((res) => {
-    console.log(`server running at ${res.url}`);
-  });
+  return server
+    .listen({ port: PORT })
+    .then((res) => {
+      console.log(`server running at ${res.url}`);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 });

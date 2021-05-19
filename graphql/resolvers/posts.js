@@ -10,7 +10,7 @@ module.exports = {
       try {
         // we will sort the returned posts such that the newest posts are first in the array
 
-        const posts = await Post.find().sort({ createdAt: 1 });
+        const posts = await Post.find().sort({ createdAt: -1 });
         return posts;
       } catch (err) {
         throw new Error(err);
